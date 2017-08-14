@@ -9,7 +9,7 @@ The following helper files can be used to generate autocompletion CSV from the i
 
 # Limitations:
 
-* The Freemarker template currently only supports URL actions, sourced from the document's URL. This will be exteneded to support query triggers at some point.
+* The Freemarker template currently only supports URL and query actions, sourced from the document's URL. 
 
 # Usage instructions
 

@@ -1,4 +1,8 @@
 <#ftl encoding="utf-8" /><#compress>
+<#--
+auto-completion.ftl: This template is used to generate auto-completion CSV from the Funnelback index. This file is included as part of the funnelback-concierge GitHub project. See: https://github.com/funnelback/funnelback-concierge/
+Author: Peter Levan, 2017
+-->
 <#import "/web/templates/modernui/funnelback_classic.ftl" as s/>
 <#import "/web/templates/modernui/funnelback.ftl" as fb/>
 <@s.Results>
@@ -21,6 +25,14 @@
 }
 </@compress>
 </#assign>
+<#--Check to see if the action has been configured, URL mode directing to the ClickUrl is the default-->
+<#assign configActionMode>question.collection.configuration.value("auto-completion.${question.profile?replace("_preview","")}.action-mode")</#assign>
+<#assign configActionModeEval=configActionMode?eval!"U">
+<#if configActionModeEval == "Q">
+    <#assign actionmode = "Q">
+<#else>
+    <#assign actionmode = "U">
+</#if>
 <#if s.result.class.simpleName != "TierBar">
     <#-- read in a comma separated list of triggers from collection.cfg for each auto-completion profile.  Each trigger can be made up of multiple words sourced from
         different fields.  Profile is read from the profile CGI parameter when the auto-completion is generated.
@@ -43,13 +55,19 @@
             <#assign triggerClean = triggerVars?eval?lower_case?replace("[^A-Za-z0-9\\s]"," ","r")?replace("\\s+"," ","r")>
             <#assign trigger += triggerClean+" ">
         </#list>
-        <#assign trigger=trigger?replace("\\s+$","","r")>
+        <#assign trigger=trigger?replace("\\s+$","","r")?replace("^\\s+","","r")>
+        <#-- set up the action -->
+        <#if actionmode == "Q">
+            <#assign action = trigger>
+        <#else>
+            <#assign action = s.result.clickTrackingUrl>
+        </#if>
         <#list trigger?split(" ") as x>
             <#-- process each trigger, stripping out stop words -->
             <#if response.customData["stopwords"]?? && response.customData["stopwords"]?seq_contains(x)>
                 <#assign trigger>${trigger?replace("^"+x+"\\s+","","r")}</#assign>
             <#elseif trigger??>
-                "${trigger}",900,${escapeCsv(displayJson)},J,"",,"${s.result.clickTrackingUrl!}",U
+                "${trigger}",900,${escapeCsv(displayJson)},J,"",,"${action}",${actionmode}
                 <#assign trigger>${trigger?replace("^"+x+"\\s+","","r")}</#assign>
             </#if>
         </#list>

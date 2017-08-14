@@ -31,6 +31,13 @@ The following helper files can be used to generate autocompletion CSV from the i
 	```
 	auto-completion.people.triggers=s.result.metaData["firstName"]! s.result.metaData["lastName"]!,s.result.metaData["lastName"]! s.result.metaData["firstName"]!,s.result.metaData["department"]!,s.result.title
 	```
+* If the result does not have a URL configure the action mode.  Supported values are "Q": execute the trigger as a query; "U": redirect to the value contained in the ClickUrl
+
+	e.g. use the trigger running as a query for the action.
+
+	```
+	auto-completion.people.action-mode=Q
+	```
 
 ### Step 2: Copy the post process hook script to the collection
 
@@ -58,5 +65,5 @@ The following helper files can be used to generate autocompletion CSV from the i
 ### Step 5: Configure concierge JavaScript
 
 * Add the new sources to autocompletion.
-* Each new source can be added to concierge by defining a new data source that uses the correct collection and profile.  The results can be templated from the same datasource configuration and all the metadata that was defined in padre\_opts should be available to use in the template,.
+* Each new source can be added to concierge by defining a new data source that uses the correct collection and profile.  The results can be templated from the same datasource configuration and all the metadata that was defined in padre\_opts should be available to use in the template.
 

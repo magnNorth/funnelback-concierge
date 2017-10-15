@@ -2,7 +2,7 @@
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 
-if )transaction.question.form = "auto-completion") {
+if (transaction.question.form = "auto-completion") {
         transaction?.response?.resultPacket?.results.each() {
         // Do this for each result item
 
